@@ -14,6 +14,6 @@ RUN cargo install --path . --verbose
 FROM debian:stable-slim
 
 COPY --from=cargo-build /usr/local/cargo/bin/jakeland /bin
-EXPOSE 8000
+EXPOSE 8080
 
 CMD ["jakeland"]
