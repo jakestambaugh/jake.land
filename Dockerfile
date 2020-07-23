@@ -6,9 +6,6 @@ WORKDIR /usr/src/app
 COPY Cargo.toml .
 COPY Cargo.lock .
 COPY ./src src
-RUN mkdir .cargo
-# Run `cargo vendor` in a separate step to create a cache-able layer
-RUN cargo vendor > .cargo/config
 
 RUN cargo build --release
 RUN cargo install --path . --verbose
