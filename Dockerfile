@@ -15,5 +15,4 @@ FROM debian:stable-slim
 
 COPY --from=cargo-build /usr/local/cargo/bin/jakeland /bin
 
-RUN echo "$PORT"
-CMD ["jakeland"]
+CMD ROCKET_PORT=$PORT /bin/jakeland
