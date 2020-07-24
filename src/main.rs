@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate rocket;
 
+mod jakeland;
+
 #[get("/")]
 fn home() -> &'static str {
     "Hello, world! Welcome to Jake's blog"
@@ -11,11 +13,17 @@ fn show_post(post_id: u64) -> String {
     format!("Post id: {}", post_id)
 }
 
+#[post("/")]
+fn create_post() -> String {
+    let post = jakeland::Post::new();
+    format!("Post #{}: *{}* - by {}", post.id, post.author, post.body)
+}
+
 #[launch]
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount("/", routes![home])
-        .mount("/post/", routes![show_post])
+        .mount("/post/", routes![show_post, create_post])
 }
 
 #[cfg(test)]
@@ -24,7 +32,7 @@ mod test {
     use rocket::http::Status;
 
     #[test]
-    fn test_post_31() {
+    fn test_post_id() {
         use rocket::local::blocking::Client;
 
         let client = Client::new(rocket()).unwrap();

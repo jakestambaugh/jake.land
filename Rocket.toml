@@ -4,7 +4,7 @@ port = 8080
 workers = 1
 keep_alive = 5
 log = "normal"
-secret_key = "dev secret key dont tell"
+secret_key = "wCv8jjDPMqQo5mDEvCzPAW14+9xmW05m6hScXvSEKMc="
 limits = { forms = 32768 }
 
 [staging]
@@ -13,7 +13,7 @@ port = 8080
 workers = 1
 keep_alive = 5
 log = "normal"
-secret_key = "This is not secure"
+secret_key = "4UZBQxMsa9qG0gZBLpNWP8JIp8jnaHEE4JnvFSr/m4k="
 limits = { forms = 32768 }
 
 [production]
@@ -22,5 +22,5 @@ port = 8080
 workers = 12
 keep_alive = 5
 log = "critical"
-secret_key = "TODO: generate better secret key"
+secret_key = "LaLcA1UjMlmZ5VndxNZzTnlOqvBfHa4zOF2lqTvJbts="
 limits = { forms = 32768 }
