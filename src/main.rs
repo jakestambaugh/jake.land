@@ -1,11 +1,16 @@
 #[macro_use]
 extern crate rocket;
+extern crate rocket_contrib;
+
+use std::collections::HashMap;
+use rocket_contrib::templates::Template;
 
 mod jakeland;
 
 #[get("/")]
-fn home() -> &'static str {
-    "Hello, world! Welcome to Jake's blog"
+fn home() -> Template {
+    let context: HashMap<&str, &str> = HashMap::new();
+    Template::render("index", context)
 }
 
 #[get("/<post_id>")]
@@ -22,6 +27,7 @@ fn create_post() -> String {
 #[launch]
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
+        .attach(Template::fairing())
         .mount("/", routes![home])
         .mount("/post/", routes![show_post, create_post])
 }
