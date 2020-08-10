@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head>
+    <title>Jake Stambaugh - {{ title }}</title>
+</head>
+<body>
+    {{!-- The {{> }} syntax calls a partial --}}
+    {{~> header}}
+    {{! The addition of the ~ character trims whitespace from the injected template }}
+    {{~> page}}
+    {{~> footer}}
+</body>
+</html>

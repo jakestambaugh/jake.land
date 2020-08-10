@@ -1,0 +1,15 @@
+{{#*inline "page"}}
+
+<main>
+    {{#each blogposts}}
+    <article style="margin: min(5%, 50px)">
+        <header>
+            <h1>{{this.title}}</h1>
+        </header>
+        <p>{{this.body}}</p>
+    </article>
+    {{/each}}
+</main>
+
+{{/inline}}
+{{~> (parent)~}}

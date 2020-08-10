@@ -4,13 +4,43 @@ extern crate rocket_contrib;
 
 use std::collections::HashMap;
 use rocket_contrib::templates::Template;
+use rocket_contrib::serve::StaticFiles;
 
 mod jakeland;
 
+#[derive(serde::Serialize)]
+struct BlogPost {
+    title: &'static str,
+    body: &'static str,
+}
+
+#[derive(serde::Serialize)]
+struct HomeContext {
+    title: String,
+    blogposts: Vec<BlogPost>,
+    // This key tells handlebars whigh template is the parent.
+    parent: &'static str,
+}
+
 #[get("/")]
 fn home() -> Template {
-    let context: HashMap<&str, &str> = HashMap::new();
-    Template::render("index", context)
+    let context = HomeContext {
+        title: "Blog posts".to_string(),
+        blogposts: vec![BlogPost {
+            title: "First post",
+            body: "A wonderful post for the new blog. This is a large piece of text that will hopefully support markdown in the future",
+        }],
+        parent: "layout",
+    };
+    Template::render("blog", &context)
+}
+
+#[get("/about")]
+fn about() -> Template {
+    let mut context: HashMap<&'static str, &'static str> = HashMap::new();
+    context.insert("title", "About Me");
+    context.insert("parent", "layout");
+    Template::render("about", &context)
 }
 
 #[get("/<post_id>")]
@@ -28,7 +58,8 @@ fn create_post() -> String {
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .attach(Template::fairing())
-        .mount("/", routes![home])
+        .mount("/img/", StaticFiles::from("/bin/static/images/"))
+        .mount("/", routes![home, about])
         .mount("/post/", routes![show_post, create_post])
 }
 
@@ -57,9 +88,5 @@ mod test {
         let client = Client::new(rocket()).unwrap();
         let response = client.get("/").dispatch();
         assert_eq!(response.status(), Status::Ok);
-        assert_eq!(
-            response.into_string(),
-            Some("Hello, world! Welcome to Jake's blog".into())
-        )
     }
 }
