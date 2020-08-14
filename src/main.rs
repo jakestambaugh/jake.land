@@ -4,7 +4,7 @@ extern crate rocket_contrib;
 
 use std::collections::HashMap;
 use rocket_contrib::templates::Template;
-use rocket_contrib::serve::StaticFiles;
+use rocket_contrib::serve::{StaticFiles, crate_relative};
 
 mod jakeland;
 
@@ -58,7 +58,7 @@ fn create_post() -> String {
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .attach(Template::fairing())
-        .mount("/img/", StaticFiles::from("/bin/static/images/"))
+        .mount("/img/", StaticFiles::from(crate_relative!("static/images/")))
         .mount("/", routes![home, about])
         .mount("/post/", routes![show_post, create_post])
 }
