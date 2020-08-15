@@ -2,9 +2,9 @@
 extern crate rocket;
 extern crate rocket_contrib;
 
-use std::collections::HashMap;
+use rocket_contrib::serve::{crate_relative, StaticFiles};
 use rocket_contrib::templates::Template;
-use rocket_contrib::serve::{StaticFiles, crate_relative};
+use std::collections::HashMap;
 
 mod jakeland;
 
@@ -27,8 +27,8 @@ fn home() -> Template {
     let context = HomeContext {
         title: "Blog posts".to_string(),
         blogposts: vec![BlogPost {
-            title: "First post",
-            body: "A wonderful post for the new blog. This is a large piece of text that will hopefully support markdown in the future",
+            title: "Placeholder",
+            body: "A wonderful placeholder post for the new blog. Some day there will be interesting information displayed here. Unfortunately, today is not that day.",
         }],
         parent: "layout",
     };
@@ -58,7 +58,11 @@ fn create_post() -> String {
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .attach(Template::fairing())
-        .mount("/img/", StaticFiles::from(crate_relative!("static/images/")))
+        .mount(
+            "/img/",
+            StaticFiles::from(crate_relative!("static/images/")),
+        )
+        .mount("/css", StaticFiles::from(crate_relative!("static/css/")))
         .mount("/", routes![home, about])
         .mount("/post/", routes![show_post, create_post])
 }
@@ -75,10 +79,7 @@ mod test {
         let client = Client::new(rocket()).unwrap();
         let response = client.get("/post/31").dispatch();
         assert_eq!(response.status(), Status::Ok);
-        assert_eq!(
-            response.into_string(),
-            Some("Post id: 31".into())
-        )
+        assert_eq!(response.into_string(), Some("Post id: 31".into()))
     }
 
     #[test]
