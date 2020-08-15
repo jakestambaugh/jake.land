@@ -1,12 +1,26 @@
 #[macro_use]
 extern crate rocket;
 extern crate rocket_contrib;
+#[macro_use]
+extern crate lazy_static;
 
+use rocket::response::Redirect;
 use rocket_contrib::serve::{crate_relative, StaticFiles};
 use rocket_contrib::templates::Template;
 use std::collections::HashMap;
 
 mod jakeland;
+
+lazy_static! {
+    static ref BLOGPOSTS: Vec<BlogPost> = vec![BlogPost {
+            title: "Placeholder",
+            body: "A wonderful placeholder post for the new blog. Some day there will be interesting information displayed here. Unfortunately, today is not that day.",
+        },
+        BlogPost {
+            title: "Streaming on Twitch",
+            body: "Dear blog readers, <br>I tried streaming today <a href=\"https://twitch.tv/stambrawl\">on Twitch.</a> It was great!",
+        }];
+}
 
 #[derive(serde::Serialize)]
 struct BlogPost {
@@ -17,8 +31,8 @@ struct BlogPost {
 #[derive(serde::Serialize)]
 struct HomeContext {
     title: String,
-    blogposts: Vec<BlogPost>,
-    // This key tells handlebars whigh template is the parent.
+    blogposts: &'static Vec<BlogPost>,
+    // This key tells handlebars which template is the parent.
     parent: &'static str,
 }
 
@@ -26,13 +40,10 @@ struct HomeContext {
 fn home() -> Template {
     let context = HomeContext {
         title: "Blog posts".to_string(),
-        blogposts: vec![BlogPost {
-            title: "Placeholder",
-            body: "A wonderful placeholder post for the new blog. Some day there will be interesting information displayed here. Unfortunately, today is not that day.",
-        }],
+        blogposts: &BLOGPOSTS,
         parent: "layout",
     };
-    Template::render("blog", &context)
+    Template::render("home", &context)
 }
 
 #[get("/about")]
@@ -43,15 +54,19 @@ fn about() -> Template {
     Template::render("about", &context)
 }
 
-#[get("/<post_id>")]
-fn show_post(post_id: u64) -> String {
-    format!("Post id: {}", post_id)
+#[derive(serde::Serialize)]
+struct PostContext {
+    blogpost: &'static BlogPost,
+    parent: &'static str,
 }
 
-#[post("/")]
-fn create_post() -> String {
-    let post = jakeland::Post::new();
-    format!("Post #{}: *{}* - by {}", post.id, post.author, post.body)
+#[get("/<post_id>")]
+fn show_post(post_id: usize) -> Template {
+    let context = PostContext {
+        blogpost: &BLOGPOSTS[post_id],
+        parent: "layout",
+    };
+    Template::render("fullpost", context)
 }
 
 #[launch]
@@ -64,7 +79,7 @@ fn rocket() -> rocket::Rocket {
         )
         .mount("/css", StaticFiles::from(crate_relative!("static/css/")))
         .mount("/", routes![home, about])
-        .mount("/post/", routes![show_post, create_post])
+        .mount("/post/", routes![show_post])
 }
 
 #[cfg(test)]

@@ -21,5 +21,3 @@ CMD ROCKET_PORT=$PORT target/release/jakeland
 # COPY ./static/ /bin/static
 # COPY ./templates/ /bin/templates
 # COPY --from=cargo-build /usr/local/cargo/bin/jakeland /bin
-
-

@@ -1,12 +1,12 @@
 {{#*inline "page"}}
 
-<main>
+<main class="blog-post">
     {{#each blogposts}}
     <article style="margin: min(5%, 50px)">
         <header>
-            <h1>{{this.title}}</h1>
+            <h1><a href="/post/{{@index}}">{{this.title}}</a></h1>
         </header>
-        <p>{{this.body}}</p>
+        <p>{{{this.body}}}</p>
     </article>
     {{/each}}
 </main>
