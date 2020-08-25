@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate rocket;
 extern crate rocket_contrib;
+extern crate chrono;
 #[macro_use]
 extern crate lazy_static;
 
@@ -10,22 +11,10 @@ use rocket_contrib::templates::Template;
 use std::collections::HashMap;
 
 mod jakeland;
+use jakeland::BlogPost;
 
 lazy_static! {
-    static ref BLOGPOSTS: Vec<BlogPost> = vec![BlogPost {
-            title: "Placeholder",
-            body: "A wonderful placeholder post for the new blog. Some day there will be interesting information displayed here. Unfortunately, today is not that day.",
-        },
-        BlogPost {
-            title: "Streaming on Twitch",
-            body: "Dear blog readers, <br>I tried streaming today <a href=\"https://twitch.tv/stambrawl\">on Twitch.</a> It was great!",
-        }];
-}
-
-#[derive(serde::Serialize)]
-struct BlogPost {
-    title: &'static str,
-    body: &'static str,
+    static ref BLOGPOSTS: Vec<BlogPost> = Vec::new();
 }
 
 #[derive(serde::Serialize)]
@@ -40,7 +29,7 @@ struct HomeContext {
 fn home() -> Template {
     let context = HomeContext {
         title: "Blog posts".to_string(),
-        blogposts: &BLOGPOSTS,
+        blogposts: BlogPost::get_all(),
         parent: "layout",
     };
     Template::render("home", &context)
@@ -55,8 +44,8 @@ fn about() -> Template {
 }
 
 #[derive(serde::Serialize)]
-struct PostContext {
-    blogpost: &'static BlogPost,
+struct PostContext<'a> {
+    blogpost: &'a BlogPost,
     parent: &'static str,
 }
 
