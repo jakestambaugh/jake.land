@@ -1,7 +1,6 @@
 ---
 title: "Streaming on Twitch"
 date: 2020-08-17T15:00:00+4:00
-draft: true
 ---
 
 I tried developing my blog live on stream over the weekend and it went better than expected! My big motivation for streaming was to keep myself focused while I worked. Twitch ended up being a great excuse to stay on task and verbalize my intent before writing code.
