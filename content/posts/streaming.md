@@ -1,13 +1,12 @@
-+++
-title = "Streaming on Twitch"
-template = "base.html"
-paginate_by = 5
-+++
-
-# Streaming!
+---
+title: "Streaming on Twitch"
+date: 2020-08-17T15:00:00+4:00
+draft: true
+---
 
 I tried developing my blog live on stream over the weekend and it went better than expected! My big motivation for streaming was to keep myself focused while I worked. Twitch ended up being a great excuse to stay on task and verbalize my intent before writing code.
 
+# Streaming!
 I streamed for a little over two hours, at one point picking up 7 concurrent viewers (whoo!). Before I went live, I sent a message to some friends on Discord, and about half of them showed up (thanks!). Surprisingly, some people that I didn't know showed up and chatted! I didn't really expect that Twitch would make my stream discoverable in any way, but apparently it did.
 
 I spent most of the stream fiddling with CSS and HTML layouts for this blog. We had a few nice conversations that stayed mostly on-topic, and the whole experience felt much more cohesive than I would have predicted.
