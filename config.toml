@@ -1,0 +1,4 @@
+baseURL = "http://jake.land/"
+languageCode = "en-us"
+title = "Jake Stambaugh"
+theme = "etch"
